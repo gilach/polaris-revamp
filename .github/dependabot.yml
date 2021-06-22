@@ -1,0 +1,14 @@
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: daily
+    ignore:
+      # expo packages need to be updated manually
+      - dependency-name: 'expo-*'
+      - dependency-name: '@expo*'
+  - package-ecosystem: github-actions
+    directory: '/'
+    schedule:
+      interval: daily

@@ -3,6 +3,7 @@
     "name": "polaris-revamp",
     "slug": "polaris-revamp",
     "version": "1.0.0",
+    "owner": "nearform",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
