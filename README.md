@@ -8,3 +8,8 @@
 - `npm i`
 - `npm start`
 - follow the instructions in the terminal to run the app for Web, device or emulator
+
+## Demo
+
+- Web: https://polaris-revamp.herokuapp.com/
+- Expo Go: https://expo.io/@nearform/polaris-revamp
