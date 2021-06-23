@@ -14,7 +14,7 @@ jobs:
       - uses: actions/setup-node@v2.1.5
         with:
           node-version: 16.x
-      - uses: expo/expo-github-action@5.5.1
+      - uses: expo/expo-github-action@6.0.0
         with:
           expo-token: ${{ secrets.EXPO_TOKEN }}
       - run: npm i
