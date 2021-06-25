@@ -1,23 +1,31 @@
 import React from 'react'
-import { StyleSheet, Button, Text, View } from 'react-native'
+import { useTheme } from '@react-navigation/native'
+import { StyleSheet, View } from 'react-native'
+import { useTranslation } from 'react-i18next'
+import { Text, Button } from 'react-native-paper'
 
 import NearFormLogo from '../../images/NearFormLogo'
-import colors from '../../theme/colors'
-import { TNavigation } from '../../prop-types'
+import { TNavigation } from '../../lib/prop-types'
+import { Screens } from '../../lib/const'
 
 export default function HomeScreen({ navigation }) {
+  const theme = useTheme()
+  const { t } = useTranslation()
+
   return (
     <View style={styles.container}>
       <NearFormLogo
         style={styles.logo}
-        fill={colors.primary}
+        fill={theme.colors.primary}
         title="NearForm"
       />
-      <Text>Open up App.js to start working on your app!</Text>
+      <Text>{t('Welcome')}</Text>
       <Button
-        title="Go to simple view"
-        onPress={() => navigation.push('SimpleView')}
-      ></Button>
+        mode="contained"
+        onPress={() => navigation.push(Screens.SimpleView)}
+      >
+        Go to simple view
+      </Button>
     </View>
   )
 }
@@ -29,7 +37,6 @@ HomeScreen.propTypes = {
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
-    backgroundColor: colors.white,
     flex: 1,
     justifyContent: 'center'
   },

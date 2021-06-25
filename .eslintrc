@@ -25,7 +25,8 @@
       {
         "newlines-between": "always"
       }
-    ]
+    ],
+    "react-native/no-raw-text": "off"
   },
   "settings": {
     "react": {

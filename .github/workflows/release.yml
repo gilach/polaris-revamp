@@ -1,0 +1,78 @@
+name: release
+
+on:
+  workflow_dispatch:
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 16.x
+      - uses: actions/cache@v2.1.6
+        with:
+          path: ~/.turtle
+          key: ${{ runner.os }}-turtle
+          restore-keys: |
+            ${{ runner.os }}-turtle
+      - uses: actions/setup-java@v1.4.3
+        with:
+          java-version: '8'
+      - uses: expo/expo-github-action@6.0.0
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+          expo-cache: true
+      - run: npm i
+      - run: expo doctor
+      - run: expo diagnostics
+      - run: expo export --clear --dev --public-url http://localhost:5000 --output-dir export
+      - uses: actions/upload-artifact@v2
+        with:
+          name: export
+          path: export/
+
+  android:
+    needs: export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: actions/setup-node@v2.1.5
+        with:
+          node-version: 16.x
+      - uses: actions/setup-java@v1.4.3
+        with:
+          java-version: '8'
+      - run: npm i
+      - uses: actions/download-artifact@v2
+        with:
+          name: export
+          path: export
+      - uses: expo/expo-github-action@6.0.0
+        with:
+          expo-version: 4.x
+          token: ${{ secrets.EXPO_TOKEN }}
+          expo-cache: true
+      - run: npx serve export &
+      - name: build apk
+        run: |
+          echo "$EXPO_ANDROID_KEYSTORE_BASE64" > keystore.jks.base64
+          base64 --decode keystore.jks.base64 > keystore.jks
+          npm run build:local:android -- --type=apk --output=build/polaris.apk --public-url=http://localhost:5000/android-index.json --allow-non-https-public-url --keystore-path=./keystore.jks --keystore-alias=$EXPO_ANDROID_KEYSTORE_ALIAS
+        env:
+          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.EXPO_ANDROID_KEYSTORE_BASE64 }}
+          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.EXPO_ANDROID_KEYSTORE_ALIAS }}
+          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.EXPO_ANDROID_KEYSTORE_PASSWORD }}
+          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.EXPO_ANDROID_KEY_PASSWORD }}
+      - uses: actions/upload-artifact@v2
+        with:
+          name: build
+          path: build/
+      - name: upload apk
+        run: |
+          echo "$PLAY_STORE_SERVICE_ACCOUNT_KEY_JSON" > play-store-account-key.json
+          expo upload:android --key ./play-store-account-key.json --path ./build/polaris.apk --type apk --release-status draft
+        env:
+          PLAY_STORE_SERVICE_ACCOUNT_KEY_JSON: ${{ secrets.PLAY_STORE_SERVICE_ACCOUNT_KEY_JSON }}
