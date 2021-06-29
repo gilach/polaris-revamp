@@ -2,6 +2,7 @@
 
 [![ci](https://github.com/nearform/polaris-revamp/actions/workflows/ci.yml/badge.svg)](https://github.com/nearform/polaris-revamp/actions/workflows/ci.yml)
 [![publish](https://github.com/nearform/polaris-revamp/actions/workflows/publish.yml/badge.svg)](https://github.com/nearform/polaris-revamp/actions/workflows/publish.yml)
+[![release](https://github.com/nearform/polaris-revamp/actions/workflows/release.yml/badge.svg)](https://github.com/nearform/polaris-revamp/actions/workflows/release.yml)
 
 ## Setup
 
